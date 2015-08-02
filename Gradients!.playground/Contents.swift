@@ -14,6 +14,11 @@ class GradientView: NSView {
         println("Elapsed time: \(elapsedTime) seconds")
     }
     
+    func colorForCoords(x: Double, y: Double) -> NSColor {
+        let degrees = atan(y / x) * 180 / M_PI
+        let alpha = degrees / 90
+        return NSColor(calibratedRed: 1.0, green: 0.0, blue: 0.0, alpha: CGFloat(alpha))
+    }
     
     func drawGradient(rect : CGRect) {
         let width:Double = Double(rect.size.width)
@@ -22,8 +27,7 @@ class GradientView: NSView {
     
         for x in stride(from: 0, through: width, by: blockiness) {
             for y in stride(from: 0, through: height, by: blockiness) {
-                let alpha = degreesFromCartesian(x, y: y) / 90
-                let color = NSColor(calibratedRed: 1.0, green: 0.0, blue: 0.0, alpha: CGFloat(alpha))
+                let color = colorForCoords(x, y: y)
                 color.setFill()
                 NSBezierPath.fillRect(CGRect(x: x, y: y, width: blockiness, height: blockiness))
             }
@@ -33,11 +37,6 @@ class GradientView: NSView {
         println("Calculation time: \(elapsedTime)")
     }
     
-    func degreesFromCartesian(x: Double, y: Double) -> Double {
-        let degrees = atan(y / x) * 180 / M_PI
-        
-        return degrees
-    }
 }
 
 let sideLength = 200
